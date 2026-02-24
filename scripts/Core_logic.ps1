@@ -8,7 +8,7 @@ if (!(Test-Path $fillPath)) {
     attrib +h +s +r $fillPath
 }
 
-# --- 2. 批量替换桌面图标 (赛琳化) ---
+# --- 2. 批量替换桌面图标 (Cyrene) ---
 $iconSource = "$PSScriptRoot\Assets\cyrene_pfp.ico"
 if (Test-Path $iconSource) {
     $shell = New-Object -ComObject WScript.Shell
@@ -17,6 +17,7 @@ if (Test-Path $iconSource) {
         $lnk.IconLocation = $iconSource
         $lnk.Save()
     }
+    ie4uinit.exe -show
 }
 
 # --- 3. 修改系统壁纸 ---
