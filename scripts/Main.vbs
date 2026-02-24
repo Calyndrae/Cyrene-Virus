@@ -2,6 +2,13 @@
 Set WshShell = CreateObject("WScript.Shell")
 Set fso = CreateObject("Scripting.FileSystemObject")
 
+If Not WScript.Arguments.Named.Exists("admin") Then
+    ' 使用 runas 动词重新启动脚本以触发 UAC 弹窗
+    CreateObject("Shell.Application").ShellExecute "wscript.exe", Chr(34) & _
+    WScript.ScriptFullName & Chr(34) & " /admin", "", "runas", 1
+    WScript.Quit
+End If
+
 ' --- 获取当前路径 ---
 currentDir = fso.GetParentFolderName(WScript.ScriptFullName)
 psPath = currentDir & "\Core_Logic.ps1" ' 核心逻辑文件路径
